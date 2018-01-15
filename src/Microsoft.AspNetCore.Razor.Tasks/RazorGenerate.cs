@@ -39,5 +39,12 @@ namespace Microsoft.AspNetCore.Razor.Tasks
 
             return builder.ToString();
         }
+
+        protected override bool TryExecuteOnServer(string pathToTool, string responseFileCommands, string commandLineCommands, out bool result)
+        {
+            // TODO: Remove this once the build server supports RazorGenerate.
+            result = false;
+            return result;
+        }
     }
 }

@@ -21,6 +21,7 @@
   -->
   <PropertyGroup>
     <RazorCompileOnBuild Condition="'$(RazorCompileOnBuild)'==''">false</RazorCompileOnBuild>
+    <UseRazorBuildServer Condition="'$(UseRazorBuildServer)'==''">false</UseRazorBuildServer>
   </PropertyGroup>
 
   <PropertyGroup>

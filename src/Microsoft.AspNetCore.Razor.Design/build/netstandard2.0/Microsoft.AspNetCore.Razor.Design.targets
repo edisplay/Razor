@@ -114,6 +114,7 @@
       Debug="$(_RazorDebugTagHelperTask)"
       DebugTool="$(_RazorDebugTagHelperTool)"
       ToolAssembly="$(_RazorTagHelperToolAssembly)"
+      UseServer="$(UseRazorBuildServer)"
       ServerAssembly="$(_RazorBuildServerAssembly)"
       Assemblies="@(RazorReferencePath)"
       TagHelperManifest="$(_RazorTagHelperOutputCache)">
@@ -143,6 +144,8 @@
       Debug="$(_RazorDebugGenerateCodeTask)"
       DebugTool="$(_RazorDebugGenerateCodeTool)"
       ToolAssembly="$(_RazorGenerateToolAssembly)"
+      UseServer="$(RazorUseBuildServer)"
+      ServerAssembly="$(_RazorBuildServerAssembly)"
       Sources="@(RazorGenerate)"
       ProjectRoot="$(MSBuildProjectDirectory)"
       TagHelperManifest="$(_RazorTagHelperOutputCache)"

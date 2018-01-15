@@ -17,8 +17,6 @@ namespace Microsoft.AspNetCore.Razor.Tasks
         [Required]
         public string TagHelperManifest { get; set; }
 
-        public string ServerAssembly { get; set; }
-
         protected override bool SkipTaskExecution()
         {
             if (Assemblies.Length == 0)

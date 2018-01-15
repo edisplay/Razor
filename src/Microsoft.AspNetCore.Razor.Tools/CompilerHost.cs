@@ -2,6 +2,8 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using Microsoft.CodeAnalysis.CommandLine;
 
@@ -25,7 +27,14 @@ namespace Microsoft.AspNetCore.Razor.Tools
                     return new RejectedBuildResponse();
                 }
 
-                return null;
+                // TODO: This needs to know the difference between TaghelperTool and GenerateTool and act accordingly.
+                var app = new Application(cancellationToken);
+                var command = new DiscoverCommand(app);
+                var commandArgs = parsed.args.Where(a => !string.IsNullOrEmpty(a));
+                var projectRootArgs = new[] { "-p", parsed.workingDirectory };
+                var exitCode = command.Execute(commandArgs.Concat(projectRootArgs).ToArray());
+
+                return new CompletedBuildResponse(exitCode, false, "Yaay it works?");
             }
 
             private bool TryParseArguments(BuildRequest request, out (string workingDirectory, string tempDirectory, string[] args) parsed)
@@ -35,7 +44,7 @@ namespace Microsoft.AspNetCore.Razor.Tools
 
                 // The parsed arguments will contain 'string.Empty' in place of the arguments that we don't want to pass
                 // to the compiler.
-                var args = new List<string>(request.Arguments.Count);
+                var args = new string[request.Arguments.Count];
 
                 for (var i = 0; i < request.Arguments.Count; i++)
                 {
@@ -58,7 +67,7 @@ namespace Microsoft.AspNetCore.Razor.Tools
 
                 CompilerServerLogger.Log($"WorkingDirectory = '{workingDirectory}'");
                 CompilerServerLogger.Log($"TempDirectory = '{tempDirectory}'");
-                for (var i = 0; i < args.Count; i++)
+                for (var i = 0; i < args.Length; i++)
                 {
                     CompilerServerLogger.Log($"Argument[{i}] = '{request.Arguments[i]}'");
                 }
@@ -87,7 +96,7 @@ namespace Microsoft.AspNetCore.Razor.Tools
                     return false;
                 }
 
-                parsed = (workingDirectory, tempDirectory, args.ToArray());
+                parsed = (workingDirectory, tempDirectory, args);
                 return true;
             }
         }
